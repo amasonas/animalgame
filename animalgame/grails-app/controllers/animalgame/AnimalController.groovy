@@ -5,6 +5,7 @@ package animalgame
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 import animalgame.Animal
+import gameutils.GameHelper
 
 @Transactional(readOnly = true)
 class AnimalController {
@@ -13,33 +14,52 @@ class AnimalController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        println "test param "+ listStringToINteger(params.listDoNotDo).getClass()
+        println "test param "+ params.listDoNotDo
+        
+        //converting params to list of integer
+        def listIdDoNotDo = GameHelper.convertStringListToLongList(params.listDoNotDo)
+        def listIdDo = GameHelper.convertStringListToLongList(params.listDo)
         params.max = Math.min(max ?: 10, 100)
         println "Animals left "+Animal.list(params).getTotalCount() 
         def animalCriteria = Animal.createCriteria()
-        def result = animalCriteria.list{
-            listDoNotDo{
-                'in'('id', [1l , 3l])
+        def result
+        if(!params.listDoNotDo && !params.listDo){
+            respond Animal.list(), [status: OK]
+        }
+        
+        if(params.listDoNotDo.length() > 0 && params.listDo.length() >0){
+            result =  animalCriteria.list{
+                or{ 
+                    listDoNotDo{
+                        'in'('id', listIdDoNotDo)
+                    }
+                    listDo{
+                        'in'('id', listIdDo)
+                    }
+                }
             }
-        };
+        }else if(params.listDoNotDo.length() > 0 ){
+            result =  animalCriteria.list{
+                listDoNotDo{
+                'in'('id', listIdDoNotDo)
+                }
+            };
+        }else{
+            result =  animalCriteria.list{
+                listDo{
+                'in'('id', listIdDo)
+                }
+            };
+        }
         respond result, [status: OK]
         
     }
-
-    def listStringToINteger(String str){
-        Pattern pattern = Pattern.compile("\\d+");
-        Matcher matcher = pattern.matcher(str);
-
-        List<Long> list = new ArrayList<Long>();
-
-        while (matcher.find()) {
-            System.out.println(matcher.group());
-            list.add(Long.parseLong(matcher.group())); // Add the value to the list
-        }
-        list
-    }
+    
     @Transactional
     def save(Animal animalInstance) {
+        println "saving animal"
+        println params.list.listDo
+        println "______"
         if (animalInstance == null) {
             render status: NOT_FOUND
             return

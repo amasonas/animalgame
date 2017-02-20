@@ -13,19 +13,7 @@
         <div class="row">
             <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Menu<strong class="caret"></strong></a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="#">Pensar em outro animal</a>
-                                </li>
-                                <li>
-                                    <a href="#">Limpar animais</a>
-                                </li> 
-                            </ul>
-                        </li>
-                    </ul>
+                    
                 </div>
             </nav>
         </div>
@@ -53,12 +41,12 @@
             </div>
             <div class="col-md-12 quest quest3" style="display:none">
                 <h3 class="text-center text-primary" >
-                    Este animal é um <span >Macaco</span>?
+                    Este animal é um {{animal.name}}?
                 </h3> 
-                <button type="button" class="btn btn-block btn-success">
+                <button ng-click="weHit()" type="button" class="btn btn-block btn-success">
                     Sim
                 </button> 
-                <button type="button" class="btn btn-block btn-warning">
+                <button ng-click="weAreWrong()" type="button" class="btn btn-block btn-warning">
                     Não
                 </button>
             </div>
@@ -67,20 +55,20 @@
                     Que animal você pensou?
                 </h3> 
                 <div class="form-group">
-                    <input type="text" class="form-control" id="usr">
+                    <input ng-model="userAnimal.name" type="text" class="form-control" id="usr">
                 </div>
-                <button type="button" class="btn btn-block btn-success">
+                <button ng-click="getAdjectiveFromUser()" type="button" class="btn btn-block btn-success">
                     Ok
                 </button> 
             </div>
             <div class="col-md-12 quest quest5" style="display:none">
                 <h3 class="text-center text-primary" >
-                    O que um <span>Animal</span> faz, que um <span>animal</span> não faz?
+                    O que um {{userAnimal.name}} faz, que um {{animal.name}} não faz?
                 </h3> 
                 <div class="form-group">
-                    <input type="text" class="form-control" id="usr">
+                    <input ng-model="userAnimal.adjective" type="text" class="form-control" id="usr">
                 </div>
-                <button type="button" class="btn btn-block btn-success">
+                <button ng-click="save()" type="button" class="btn btn-block btn-success">
                     Ok
                 </button> 
             </div>

@@ -12,11 +12,18 @@ class AdjectiveController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(String max) {
-        //println "indexing "+params
-        // params.max = 3
+        println params
+        String listId 
+        if(params.listDoNotDo.length() > 0 && params.listDo.length() > 0)
+            listId = params.listDoNotDo +","+params.listDo
+        else if(params.listDoNotDo.length() > 0)
+            listId = params.listDoNotDo
+        else
+            listId = params.listDo
+            
         if(params.random == "1"){
             println "random result request"
-            respond Adjective.find("from Adjective order by rand()"),[status: OK]
+            respond Adjective.find("from Adjective where id not in($listId) order by rand()"),[status: OK]
         }else{
             println "Random not requested"
             respond Adjective.list(params), [status: OK]   
@@ -34,6 +41,7 @@ class AdjectiveController {
 
         adjectiveInstance.validate()
         if (adjectiveInstance.hasErrors()) {
+            println "an error in new adjective"
             render status: NOT_ACCEPTABLE
             return
         }

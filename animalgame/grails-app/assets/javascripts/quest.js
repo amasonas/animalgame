@@ -10,9 +10,10 @@ animalGameApp.controller('animalGameController', function ($scope) {
         $scope.animal = {};
         $scope.userAnimal = {};
     }
+
     $scope.start = function(){
         $scope.defGlobalVariables();
-         $(".quest").hide();
+        $(".quest").hide();
         $(".quest1").show();
     }
 
@@ -53,7 +54,6 @@ animalGameApp.controller('animalGameController', function ($scope) {
 
     $scope.foundAnAnimal = function(response){
         $scope.animal = response[0];
-        console.log($scope.animal);
         $scope.$apply();
         $(".quest3").show();
 
@@ -111,9 +111,8 @@ animalGameApp.controller('animalGameController', function ($scope) {
 
     $scope.save = function(){
         var saveAdjective = function(response){
-            console.log(response);
             var saveAnimal = function(response){
-                alert("Obrigado, animal grvado :)");
+                alert("Obrigado, animal gravado :)");
                 $scope.start();
             }
             $scope.callUrl("http://localhost:8080/animalgame/animal/save", "POST", {name : $scope.userAnimal.name , listDo:response.id , lists : $scope.getParameters()  }, saveAnimal);

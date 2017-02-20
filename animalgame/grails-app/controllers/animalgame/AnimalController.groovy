@@ -57,9 +57,6 @@ class AnimalController {
     
     @Transactional
     def save(Animal animalInstance) {
-        println "saving animal"
-        println params.list.listDo
-        println "______"
         if (animalInstance == null) {
             render status: NOT_FOUND
             return
